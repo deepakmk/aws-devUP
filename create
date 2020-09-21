@@ -1,0 +1,47 @@
+  
+var aws = require('aws-sdk');
+var dynamodb = new aws.DynamoDB();
+
+exports.handler = async  (event) => {
+    var errors;
+
+    var obj = {
+        'TableName':"movies",
+        'Item': {
+          'name': {
+            S: `${event.name}`
+            },
+          'rating': {
+            S: `${event.rating}`
+          }
+        },
+    };
+  
+    
+    
+    try
+    {
+        var result = await dynamodb.putItem(obj).promise();
+    }
+    catch(err)
+    {
+        errors=err;
+   
+    }finally{
+        
+        
+     const response = {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
+        body: "posted",
+        
+    };
+    return response; 
+    }
+
+};
+
